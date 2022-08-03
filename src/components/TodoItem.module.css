@@ -1,0 +1,13 @@
+.todoItem {
+  width: 100%;
+  text-align: left;
+}
+
+.todoItem + .todoItem {
+  margin-top: 8px;
+}
+
+.picked {
+  border-color: #f80;
+  box-shadow: 4px 4px 8px 0 #f804;
+}

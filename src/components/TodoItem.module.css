@@ -11,3 +11,18 @@
   border-color: #f80;
   box-shadow: 4px 4px 8px 0 #f804;
 }
+
+.indicator {
+  /* position: absolute;
+  font-size: 24px; */
+}
+
+.waiting {
+  color: #777;
+}
+.processing {
+  color: #59d;
+}
+.completed {
+  color: #0b5;
+}

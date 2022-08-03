@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import { ITodo } from "../types/types";
+import { ITodo, Todo } from "../types/types";
 import cl from "./TodoItem.module.css";
 
 interface TodoItemProps {
-  todo: ITodo;
+  todo: Todo;
   selectedTodoId: number | undefined;
   setSelectedTodoId: (todos: number) => void;
 }
@@ -13,15 +13,21 @@ const TodoItem: FC<TodoItemProps> = ({
   selectedTodoId,
   setSelectedTodoId,
 }) => {
+  const statusClass =
+    todo.status === "waiting"
+      ? cl.waiting
+      : todo.status === "processing"
+      ? cl.processing
+      : cl.completed;
+  const indicatorClasses = [cl.indicator, statusClass].join(" ");
+  const btnClasses = [
+    cl.todoItem,
+    todo.id === selectedTodoId ? cl.picked : "",
+  ].join(" ");
+
   return (
-    <button
-      className={[
-        cl.todoItem,
-        todo.id === selectedTodoId ? cl.picked : "",
-      ].join(" ")}
-      onClick={pickTodo}
-    >
-      {/* <input type="checkbox" checked={todo.completed} /> */}
+    <button className={btnClasses} onClick={pickTodo}>
+      <span className={indicatorClasses}>● </span>
       <span>{todo.title}</span>
     </button>
   );

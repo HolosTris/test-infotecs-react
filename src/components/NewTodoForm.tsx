@@ -1,14 +1,15 @@
 import React, { ChangeEvent, FC, MouseEvent, useState } from "react";
-import { ITodo } from "../types/types";
+import { ITodo, Todo } from "../types/types";
 import cl from "./NewTodoForm.module.css";
 
 interface NewTodoFormProps {
-  addNewTodo: (newTodo: ITodo) => void;
+  addNewTodo: (newTodo: Todo) => void;
 }
 
 const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
   const [isActive, setIsActive] = useState(false);
   const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
   const button = (
     <button className={cl.button} onClick={activateForm}>
@@ -16,19 +17,31 @@ const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
     </button>
   );
 
-  return !isActive ? (
-    button
-  ) : (
-    <form>
-      <input
-        type="text"
-        className={cl.input}
-        value={title}
-        onChange={editText}
-      />
-      <button className={cl.button} onClick={finishCreatingTodo}>
-        Add
-      </button>
+  return (
+    <form className={cl.form}>
+      {" "}
+      {!isActive ? (
+        button
+      ) : (
+        <>
+          <input
+            type="text"
+            className={cl.input}
+            value={title}
+            onChange={editTitle}
+            placeholder="Todo title"
+          />
+          <textarea
+            className={cl.textarea}
+            value={body}
+            onChange={editBody}
+            placeholder="Todo body"
+          />
+          <button className={cl.button} onClick={finishCreatingTodo}>
+            Add
+          </button>
+        </>
+      )}
     </form>
   );
 
@@ -36,20 +49,21 @@ const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
     setIsActive(true);
   }
 
-  function editText(ev: ChangeEvent<HTMLInputElement>) {
+  function editTitle(ev: ChangeEvent<HTMLInputElement>) {
     setTitle(ev.target.value);
   }
 
+  function editBody(ev: ChangeEvent<HTMLTextAreaElement>) {
+    setBody(ev.target.value);
+  }
+
   function finishCreatingTodo() {
-    const newTodo: ITodo = {
-      id: Date.now(),
-      userId: 0,
-      title: title,
-      completed: false,
-    };
+    const newTodo = new Todo(title, body);
 
     addNewTodo(newTodo);
 
+    setTitle("");
+    setBody("");
     setIsActive(false);
   }
 };

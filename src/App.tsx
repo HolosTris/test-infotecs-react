@@ -4,25 +4,25 @@ import "./App.css";
 import TodoList from "./components/TodoList";
 import EditTodoForm from "./components/TodoEditor";
 import PostService from "./api/PostService";
-import { ITodo } from "./types/types";
+import { ITodo, Todo } from "./types/types";
 
 function App() {
-  const [todos, setTodos] = useState<ITodo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<number>();
 
-  // class method getById
-  const selectedTodo = useMemo(
-    () => todos.find((todo) => todo.id === selectedTodoId),
-    [selectedTodoId]
-  );
+  const selectedTodo = useMemo(() => {
+    if (selectedTodoId) return Todo.getById(selectedTodoId, todos);
+  }, [selectedTodoId]);
 
   useEffect(() => {
     (async () => {
-      const response = await PostService.getAllTodos();
+      const response = await PostService.getAllTodos(10);
 
       const data = (await response.json()) as ITodo[];
 
-      setTodos(data);
+      const convertedData = Todo.convertServerTodos(data);
+
+      setTodos(convertedData);
     })();
   }, []);
 

@@ -1,13 +1,14 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import PostService from "../api/PostService";
-import { ITodo } from "../types/types";
+import { ITodo, Todo } from "../types/types";
+import { isOverflown } from "../utils/utils";
 import NewTodoForm from "./NewTodoForm";
 import TodoItem from "./TodoItem";
 import cl from "./TodoList.module.css";
 
 interface TodoListProps {
-  todos: ITodo[];
-  setTodos: (todos: ITodo[]) => void;
+  todos: Todo[];
+  setTodos: (todos: Todo[]) => void;
   selectedTodoId: number | undefined;
   setSelectedTodoId: (todos: number) => void;
 }
@@ -18,8 +19,21 @@ const TodoList: FC<TodoListProps> = ({
   selectedTodoId,
   setSelectedTodoId,
 }) => {
+  const [isScrollable, setIsScrollable] = useState(false);
+
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (sectionRef.current && isOverflown(sectionRef.current))
+      setIsScrollable(true);
+    else setIsScrollable(false);
+  }, [sectionRef.current?.scrollHeight]);
+
   return (
-    <section className={cl.todoList}>
+    <section
+      ref={sectionRef}
+      className={[cl.todoList, isScrollable ? cl.withScroll : ""].join(" ")}
+    >
       <NewTodoForm addNewTodo={addNewTodo} />
       <div className={cl.todoCon}>
         {todos.map((todo) => {
@@ -36,7 +50,7 @@ const TodoList: FC<TodoListProps> = ({
     </section>
   );
 
-  function addNewTodo(newTodo: ITodo) {
+  function addNewTodo(newTodo: Todo) {
     setTodos([...todos, newTodo]);
   }
 };

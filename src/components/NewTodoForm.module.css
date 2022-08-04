@@ -19,3 +19,6 @@
   box-shadow: 4px 4px 8px 0 #0004;
   /* margin: 0 auto; */
 }
+.error {
+  border-color: #f00;
+}

@@ -1,10 +1,17 @@
 .todoItem {
   width: 100%;
   text-align: left;
+
+  padding-top: 6px;
+  padding-bottom: 6px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .todoItem + .todoItem {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .picked {

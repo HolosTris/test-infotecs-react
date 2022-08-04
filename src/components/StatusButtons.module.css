@@ -1,0 +1,28 @@
+.waitingBtn {
+  border-color: #777;
+  /* box-shadow: 4px 4px 8px 0 #7774; */
+}
+.waitingBtn.picked {
+  color: #777;
+  box-shadow: 4px 4px 8px 0 #7778;
+}
+.processingBtn {
+  border-color: #59d;
+  /* box-shadow: 4px 4px 8px 0 #59d4; */
+}
+.processingBtn.picked {
+  color: #59d;
+  box-shadow: 4px 4px 8px 0 #59d8;
+}
+.completedBtn {
+  border-color: #0b5;
+  /* box-shadow: 4px 4px 8px 0 #0b54; */
+}
+.completedBtn.picked {
+  color: #0b5;
+  box-shadow: 4px 4px 8px 0 #0b58;
+}
+
+.picked {
+  /* box-shadow: 4px 4px 8px 0 #0004; */
+}

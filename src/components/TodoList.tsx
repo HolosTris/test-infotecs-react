@@ -9,7 +9,7 @@ import cl from "./TodoList.module.css";
 interface TodoListProps {
   todos: Todo[];
   setTodos: (todos: Todo[]) => void;
-  selectedTodoId: number | undefined;
+  selectedTodoId: number | null;
   setSelectedTodoId: (todos: number) => void;
 }
 

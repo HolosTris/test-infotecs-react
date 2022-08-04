@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, MouseEvent, useState } from "react";
+import React, { ChangeEvent, FC, FormEvent, MouseEvent, useState } from "react";
 import { ITodo, Todo } from "../types/types";
 import cl from "./NewTodoForm.module.css";
 
@@ -11,6 +11,8 @@ const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
+  const [isValid, setIsValid] = useState(true);
+
   const button = (
     <button className={cl.button} onClick={activateForm}>
       New Todo
@@ -18,7 +20,7 @@ const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
   );
 
   return (
-    <form className={cl.form}>
+    <form className={cl.form} onSubmit={finishCreatingTodo}>
       {" "}
       {!isActive ? (
         button
@@ -26,7 +28,7 @@ const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
         <>
           <input
             type="text"
-            className={cl.input}
+            className={[cl.input, !isValid ? cl.error : ""].join(" ")}
             value={title}
             onChange={editTitle}
             placeholder="Todo title"
@@ -37,7 +39,7 @@ const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
             onChange={editBody}
             placeholder="Todo body"
           />
-          <button className={cl.button} onClick={finishCreatingTodo}>
+          <button type="submit" className={cl.button}>
             Add
           </button>
         </>
@@ -57,7 +59,11 @@ const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
     setBody(ev.target.value);
   }
 
-  function finishCreatingTodo() {
+  function finishCreatingTodo(ev: FormEvent) {
+    ev.preventDefault();
+
+    setIsValid(checkForm());
+    if (!checkForm()) return;
     const newTodo = new Todo(title, body);
 
     addNewTodo(newTodo);
@@ -65,6 +71,11 @@ const NewTodoForm: FC<NewTodoFormProps> = ({ addNewTodo }) => {
     setTitle("");
     setBody("");
     setIsActive(false);
+  }
+
+  function checkForm() {
+    if (title) return true;
+    else return false;
   }
 };
 

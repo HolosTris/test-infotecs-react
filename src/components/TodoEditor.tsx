@@ -1,40 +1,117 @@
-import React, { FC } from "react";
-import { ITodo, Todo } from "../types/types";
+import React, {
+  ChangeEvent,
+  FC,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { ITodo, Status, Todo } from "../types/types";
+import StatusButtons from "./StatusButtons";
 import cl from "./TodoEditor.module.css";
 
 interface EditTodoFormProps {
-  todo?: Todo;
+  todoId: number | null;
+  setTodoId: (todos: SetStateAction<number | null>) => void;
+  todos: Todo[];
+  setTodos: (todos: SetStateAction<Todo[]>) => void;
 }
 
-const EditTodoForm: FC<EditTodoFormProps> = ({ todo }) => {
-  const tip = <span>(pick any todo)</span>;
+const EditTodoForm: FC<EditTodoFormProps> = ({
+  todoId,
+  setTodoId,
+  todos,
+  setTodos,
+}) => {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [status, setStatus] = useState<Status | null>(null);
 
-  const statusBtnsClasses = [
-    [cl.waitingBtn, todo?.status === "waiting" ? cl.picked : ""].join(" "),
-    [cl.processingBtn, todo?.status === "processing" ? cl.picked : ""].join(
-      " "
-    ),
-    [cl.completedBtn, todo?.status === "completed" ? cl.picked : ""].join(" "),
-  ];
+  const todo = useMemo(() => {
+    if (todoId) return Todo.getById(todoId, todos);
+  }, [todoId]);
+
+  useEffect(() => {
+    resetForm();
+  }, [todo]);
+
+  const tip = <span>(pick any todo)</span>;
 
   return (
     <section className={cl.editTodoForm}>
       <div className={cl.controls}>
         <h3>Editing {!todo && tip}</h3>
-        <button className={cl.deleteBtn}>Delete</button>
+        <button disabled={!todo} className={cl.deleteBtn} onClick={deleteTodo}>
+          Delete
+        </button>
       </div>
-      <input type="text" className={cl.titleInput} value={todo?.title} />
-      <textarea className={cl.bodyTextarea} value={todo?.body}></textarea>
+      <input
+        disabled={!todo}
+        type="text"
+        className={cl.titleInput}
+        value={title}
+        onChange={editTitle}
+      />
+      <textarea
+        disabled={!todo}
+        className={cl.bodyTextarea}
+        value={body}
+        onChange={editBody}
+      ></textarea>
       <div className={cl.controls}>
-        <div className={cl.statusBtns}>
-          <button className={statusBtnsClasses[0]}>Waiting</button>
-          <button className={statusBtnsClasses[1]}>Processing</button>
-          <button className={statusBtnsClasses[2]}>Completed</button>
-        </div>
-        <button className={cl.doneBtn}>Done</button>
+        <button disabled={!status} className={cl.cancelBtn} onClick={resetForm}>
+          Cancel
+        </button>
+        <StatusButtons status={status} setStatus={setStatus} />
+        <button
+          disabled={!status}
+          className={cl.doneBtn}
+          onClick={finishEditing}
+        >
+          Done
+        </button>
       </div>
     </section>
   );
+
+  function editTitle(ev: ChangeEvent<HTMLInputElement>) {
+    setTitle(ev.target.value);
+  }
+
+  function editBody(ev: ChangeEvent<HTMLTextAreaElement>) {
+    setBody(ev.target.value);
+  }
+
+  function resetForm() {
+    if (todo) {
+      setTitle(todo.title);
+      setBody(todo.body);
+      setStatus(todo.status);
+    } else {
+      setTitle("");
+      setBody("");
+      setStatus(null);
+    }
+  }
+
+  function finishEditing() {
+    if (!todo) return;
+    // const editedTodo = Todo.getById(todoId, todos)
+
+    todo.title = title;
+    todo.body = body;
+    todo.status = status || todo.status;
+
+    setTodos([...todos]);
+  }
+
+  function deleteTodo() {
+    if (!todoId) return;
+
+    Todo.deleteById(todoId, todos);
+    setTodos([...todos]);
+    setTodoId(null);
+  }
 };
 
 export default EditTodoForm;

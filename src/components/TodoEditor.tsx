@@ -10,14 +10,14 @@ import { ITodo, Status, Todo } from "../types/types";
 import StatusButtons from "./StatusButtons";
 import cl from "./TodoEditor.module.css";
 
-interface EditTodoFormProps {
+interface TodoEditorProps {
   todoId: number | null;
   setTodoId: (todos: SetStateAction<number | null>) => void;
   todos: Todo[];
   setTodos: (todos: SetStateAction<Todo[]>) => void;
 }
 
-const EditTodoForm: FC<EditTodoFormProps> = ({
+const TodoEditor: FC<TodoEditorProps> = ({
   todoId,
   setTodoId,
   todos,
@@ -114,4 +114,4 @@ const EditTodoForm: FC<EditTodoFormProps> = ({
   }
 };
 
-export default EditTodoForm;
+export default TodoEditor;

@@ -1,19 +1,34 @@
 .todoList {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 300px;
-  /* scrollbar-gutter: stable; */
-  overflow: auto;
+  max-width: 300px;
+  height: 100vh;
+  overflow-y: hidden;
   padding: 0;
-}
-
-.todoList > * {
-  padding: 12px;
-}
-
-.withScroll {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 
 .todoCon {
-  margin-top: 12px;
+  overflow-y: auto;
+  height: 100%;
+  scrollbar-gutter: stable;
+}
+
+.todoCon > * {
+  padding: 12px;
+  padding-right: 4px;
+}
+
+/* .withScroll {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding-right: 4px;
+} */
+
+.searchTip {
+  text-align: center;
+  margin-bottom: 12px;
 }

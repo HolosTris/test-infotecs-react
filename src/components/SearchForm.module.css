@@ -1,0 +1,12 @@
+.form {
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  z-index: 1;
+}
+
+.input {
+  width: 100%;
+  margin-bottom: 4px;
+}

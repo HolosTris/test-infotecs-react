@@ -12,7 +12,7 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const response = await PostService.getAllTodos(10);
+      const response = await PostService.getAllTodos(20);
 
       const data = (await response.json()) as ITodo[];
 

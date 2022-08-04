@@ -41,7 +41,7 @@ const TodoItem: FC<TodoItemProps> = ({
 
   return (
     <button className={btnClasses} onClick={pickTodo}>
-      <span className={indicatorClasses}>● </span>
+      <span className={indicatorClasses}></span>
       {/* <span ref={titleSpanRef}>{titleTextRef.current}</span> */}
       <span>{todo.title}</span>
     </button>

@@ -1,56 +1,31 @@
 import React, {
+  ComponentProps,
   DragEvent,
   FC,
+  forwardRef,
   MouseEvent,
   SetStateAction,
+  useEffect,
   useState,
 } from "react";
+import { ICoords } from "../types/types";
 import cl from "./WidthChanger.module.css";
 
 interface WidthChangerProps {
-  setWidth: (width: SetStateAction<number | undefined>) => void;
+  // coords: ICoords;
+  // setCoords: (width: SetStateAction<ICoords>) => void;
+  mouseDownHandler: (event: MouseEvent) => void;
 }
 
-const WidthChanger: FC<WidthChangerProps> = ({ setWidth }) => {
-  const [isDrag, setIsDrag] = useState(false);
-  const [startX, setStartX] = useState(0);
-
+const WidthChanger: FC<WidthChangerProps> = ({
+  // coords,
+  // setCoords,
+  mouseDownHandler,
+}) => {
   return (
-    <div
-      className={cl.changer}
-      // draggable
-      // onDragStart={(ev) => ev.preventDefault()}
-      onMouseDown={startDrag}
-      onMouseOver={changeWidth}
-      onMouseUp={endDrag}
-    >
+    <div className={cl.changer} onMouseDown={mouseDownHandler}>
       <div className={cl.line}></div>
-      {/* <span>{"<>"}</span> */}
     </div>
   );
-
-  function startDrag(ev: MouseEvent) {
-    setIsDrag(true);
-    setStartX(ev.clientX);
-  }
-
-  function changeWidth(ev: MouseEvent) {
-    if (!isDrag) return;
-    console.log(ev.movementX);
-
-    const difX = ev.clientX - startX;
-
-    setWidth((width) => {
-      // if (width === undefined) return;
-      console.log(width, difX);
-      return width ? width + difX : difX;
-    });
-  }
-
-  function endDrag(ev: MouseEvent) {
-    setIsDrag(false);
-    setStartX(0);
-  }
 };
-
 export default WidthChanger;

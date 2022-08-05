@@ -1,6 +1,17 @@
-import React, { FC, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  CSSProperties,
+  FC,
+  forwardRef,
+  MouseEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import PostService from "../api/PostService";
-import { ITodo, Todo } from "../types/types";
+import useDrag from "../hooks/useDrag";
+import useResize from "../hooks/useResize";
+import { ICoords, ITodo, Todo } from "../types/types";
 import { isOverflown } from "../utils/utils";
 import NewTodoForm from "./NewTodoForm";
 import SearchForm from "./SearchForm";
@@ -13,41 +24,20 @@ interface TodoListProps {
   setTodos: (todos: Todo[]) => void;
   selectedTodoId: number | null;
   setSelectedTodoId: (todos: number) => void;
+  size: CSSProperties;
 }
+
+// const { innerHeight, innerWidth } = window;
+// const startingPosition = { x: 100, y: 0 };
 
 const TodoList: FC<TodoListProps> = ({
   todos,
   setTodos,
   selectedTodoId,
   setSelectedTodoId,
+  size,
 }) => {
   const [query, setQuery] = useState("");
-
-  // const [isScrollable, setIsScrollable] = useState(false);
-
-  // const isOverflownRef = useRef(false);
-
-  const sectionRef = useRef<HTMLElement>(null);
-
-  const [sectionWidth, setSectionWidth] = useState<number>();
-
-  // useEffect(() => {
-  //   console.log(sectionRef.current);
-
-  //   if (!sectionRef.current) return;
-  //   console.log(sectionWidth);
-
-  //   if (!sectionWidth) setSectionWidth(sectionRef.current.offsetWidth);
-  //   else {
-  //     sectionRef.current.style.width = sectionWidth + "px";
-  //   }
-  // }, [sectionWidth, sectionRef.current?.offsetWidth]);
-
-  // useEffect(() => {
-  //   if (sectionRef.current && isOverflown(sectionRef.current))
-  //     isOverflownRef.current = true;
-  //   else isOverflownRef.current = false;
-  // }, [sectionRef.current?.scrollHeight]);
 
   const foundTodos = useMemo(() => {
     return filterTodo(query, todos);
@@ -55,7 +45,12 @@ const TodoList: FC<TodoListProps> = ({
 
   return (
     <>
-      <section ref={sectionRef} className={cl.todoList}>
+      <section
+        className={cl.todoList}
+        style={{
+          ...size,
+        }}
+      >
         <div className={cl.todoCon}>
           <SearchForm query={query} setQuery={setQuery} />
           <div>
@@ -67,6 +62,7 @@ const TodoList: FC<TodoListProps> = ({
                   todo={todo}
                   selectedTodoId={selectedTodoId}
                   setSelectedTodoId={setSelectedTodoId}
+                  searchQuery={query}
                 />
               );
             })}
@@ -74,7 +70,6 @@ const TodoList: FC<TodoListProps> = ({
         </div>
         <NewTodoForm addNewTodo={addNewTodo} />
       </section>
-      {/* <WidthChanger setWidth={setSectionWidth} /> */}
     </>
   );
 

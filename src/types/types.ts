@@ -5,6 +5,13 @@ export interface ITodo {
   completed: boolean;
 }
 
+export interface ICoords {
+  width: number;
+  startWidth: number;
+  startX: number;
+  dist: number;
+}
+
 export type Status = "waiting" | "processing" | "completed";
 
 export class Todo {

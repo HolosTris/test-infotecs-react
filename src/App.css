@@ -42,14 +42,15 @@ body {
 
 .App {
   display: flex;
+  /* justify-content: space-between; */
   padding: 12px;
   height: 100vh;
   /* width: 100%; */
+  user-select: none;
 }
 
 .App > * {
   max-height: 100%;
-  overflow-y: auto;
 }
 
 section {

@@ -41,3 +41,10 @@
 .completed {
   color: #0b5;
 }
+
+.highlight {
+  background-color: #f808;
+  /* height: 5em; */
+  /* line-height: 2; */
+  padding-top: 0.05em;
+}

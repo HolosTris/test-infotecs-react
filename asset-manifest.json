@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/test-infotecs-react/static/css/main.4d4f70a8.css",
+    "main.js": "/test-infotecs-react/static/js/main.ce4f2010.js",
+    "index.html": "/test-infotecs-react/index.html",
+    "main.4d4f70a8.css.map": "/test-infotecs-react/static/css/main.4d4f70a8.css.map",
+    "main.ce4f2010.js.map": "/test-infotecs-react/static/js/main.ce4f2010.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4d4f70a8.css",
+    "static/js/main.ce4f2010.js"
+  ]
+}

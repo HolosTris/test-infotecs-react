@@ -1,15 +1,8 @@
-export interface ITodo {
+export interface IServerTodo {
   id: number;
   userId: number;
   title: string;
   completed: boolean;
-}
-
-export interface ICoords {
-  width: number;
-  startWidth: number;
-  startX: number;
-  dist: number;
 }
 
 export type Status = "waiting" | "processing" | "completed";
@@ -22,8 +15,9 @@ export class Todo {
   status: Status;
 
   constructor(title: string, body: string);
-  constructor(serverTodo: ITodo);
-  constructor(titleOrServerTodo: string | ITodo, body?: string) {
+  constructor(serverTodo: IServerTodo);
+  constructor(titleOrServerTodo: string | IServerTodo, body?: string) {
+    // Для конвертации todo с JSONplaceholder
     if (typeof titleOrServerTodo === "object") {
       const serverTodo = titleOrServerTodo;
 
@@ -33,6 +27,7 @@ export class Todo {
       this.body = serverTodo.title;
       this.status = serverTodo.completed ? "completed" : "waiting";
     } else {
+      // Для создания новых todo
       const title = titleOrServerTodo;
 
       this.id = Date.now();
@@ -53,7 +48,7 @@ export class Todo {
     return todos.splice(i, 1);
   }
 
-  static convertServerTodos(serverTodos: ITodo[]) {
+  static convertServerTodos(serverTodos: IServerTodo[]) {
     return serverTodos.map((serverTodo) => new Todo(serverTodo));
   }
 }

@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { ITodo, Status, Todo } from "../types/types";
+import { IServerTodo, Status, Todo } from "../types/types";
 import StatusButtons from "./StatusButtons";
 import cl from "./TodoEditor.module.css";
 
@@ -96,7 +96,6 @@ const TodoEditor: FC<TodoEditorProps> = ({
 
   function finishEditing() {
     if (!todo) return;
-    // const editedTodo = Todo.getById(todoId, todos)
 
     todo.title = title;
     todo.body = body;

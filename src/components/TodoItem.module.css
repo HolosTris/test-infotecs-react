@@ -15,8 +15,8 @@
 }
 
 .picked {
-  border-color: #f80;
-  box-shadow: 4px 4px 8px 0 #f804;
+  border-color: var(--orange);
+  box-shadow: 4px 4px 8px 0 var(--orange-25);
 }
 
 .indicator {
@@ -33,17 +33,17 @@
 }
 
 .waiting {
-  color: #777;
+  color: var(--waiting-status);
 }
 .processing {
-  color: #59d;
+  color: var(--processing-status);
 }
 .completed {
-  color: #0b5;
+  color: var(--completed-status);
 }
 
 .highlight {
-  background-color: #f808;
+  background-color: var(--orange-50);
   /* height: 5em; */
   /* line-height: 2; */
   padding-top: 0.05em;

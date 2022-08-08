@@ -1,26 +1,26 @@
 .waitingBtn {
-  border-color: #777;
+  border-color: var(--waiting-status);
   /* box-shadow: 4px 4px 8px 0 #7774; */
 }
 .waitingBtn.picked {
-  color: #777;
-  box-shadow: 4px 4px 8px 0 #7778;
+  color: var(--waiting-status);
+  box-shadow: 4px 4px 8px 0 var(--waiting-status-50);
 }
 .processingBtn {
-  border-color: #59d;
+  border-color: var(--processing-status);
   /* box-shadow: 4px 4px 8px 0 #59d4; */
 }
 .processingBtn.picked {
-  color: #59d;
-  box-shadow: 4px 4px 8px 0 #59d8;
+  color: var(--processing-status);
+  box-shadow: 4px 4px 8px 0 var(--processing-status-50);
 }
 .completedBtn {
-  border-color: #0b5;
+  border-color: var(--completed-status);
   /* box-shadow: 4px 4px 8px 0 #0b54; */
 }
 .completedBtn.picked {
-  color: #0b5;
-  box-shadow: 4px 4px 8px 0 #0b58;
+  color: var(--completed-status);
+  box-shadow: 4px 4px 8px 0 var(--completed-status-50);
 }
 
 .picked {

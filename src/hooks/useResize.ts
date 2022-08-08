@@ -1,4 +1,4 @@
-import { CSSProperties, MouseEvent, useState } from "react";
+import { CSSProperties, MouseEvent, RefObject, useRef, useState } from "react";
 
 interface ISizeParams {
   height?: number;
@@ -12,32 +12,45 @@ interface ISizeParams {
 function useResize(
   params: ISizeParams
 ): [
-  CSSProperties,
+  RefObject<HTMLElement>,
   (event: MouseEvent) => void,
   (event: MouseEvent) => void,
   (event: MouseEvent) => void
 ] {
   const { height, width, minHeight, minWidth, maxHeight, maxWidth } = params;
 
+  const startSize = {
+    height: height,
+    width: width,
+  };
+
   const [dragInfo, setDragInfo] = useState({
     isDragging: false,
     origin: { x: 0, y: 0 },
-    size: { height: height, width: width },
-    lastSize: { height: height, width: width },
+    size: { ...startSize },
+    lastSize: { ...startSize },
   });
 
+  // Создаём ссылку на нужный элемент.
+  // Именно ссылку, потому что иначе мы не будем знать настоящих размеров элемента и опираться только на maxWidth и maxHeight. Что не подходит для маленького экрана
+  const elemRef = useRef<HTMLElement>(null);
+  const elem = elemRef.current;
+
   const { isDragging } = dragInfo;
-  const handleMouseDown = ({ clientX, clientY, target }: MouseEvent) => {
-    // if (!isDragging && target === targetElem)
+
+  // Здесь запоминаем начальное положение курсора при нажатии на компонент WidthChanger и начинаем изменение размера
+  const handleMouseDown = ({ clientX, clientY }: MouseEvent) => {
     if (!isDragging)
       setDragInfo({
         ...dragInfo,
         isDragging: true,
         origin: { x: clientX, y: clientY },
       });
+    console.log(dragInfo.lastSize);
   };
 
-  const handleMouseMove = ({ clientX, clientY, target }: MouseEvent) => {
+  // Здесь, собственно, изменяем размер относительно начального положения курсора и опираясь на настоящие размеры элемента section компонента TodoList во время окончания прошлого ресайза
+  const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
     if (isDragging) {
       const { origin, lastSize, size } = dragInfo;
 
@@ -63,42 +76,48 @@ function useResize(
             : newWidth;
       }
 
-      // console.log(clientX, origin.x, newWidth, lastSize.width);
+      // console.log(clientX, origin.x, size.width, lastSize.width);
 
       setDragInfo({ ...dragInfo });
     }
   };
 
-  const handleMouseUp = ({ target }: MouseEvent) => {
+  // Задаём и запоминаем настоящие размеры списка todo
+  const handleMouseUp = () => {
     if (isDragging) {
       const { size } = dragInfo;
+
+      const actualSize = {
+        width: size.width && elem?.offsetWidth,
+        height: size.height && elem?.offsetHeight,
+      };
+
       setDragInfo({
         ...dragInfo,
         isDragging: false,
-        lastSize: { width: size.width, height: size.height },
+        size: { ...actualSize },
+        lastSize: { ...actualSize },
       });
     }
   };
 
-  const elementSize: CSSProperties = {
-    // position: "absolute",
-  };
+  // Задаём стили изменяемого элемента. В данном случае - это элемент section из TodoList
+  if (elem?.style) {
+    maxHeight && (elem.style.maxHeight = `${maxHeight}px`);
 
-  minHeight && (elementSize.maxHeight = `${minHeight}px`);
+    maxWidth && (elem.style.maxWidth = `${maxWidth}px`);
 
-  minWidth && (elementSize.maxWidth = `${minWidth}px`);
+    minHeight && (elem.style.minHeight = `${minHeight}px`);
 
-  if (dragInfo.size.height) {
-    // elementSize.height = `${dragInfo.size.height}px`;
-    elementSize.minHeight = `${dragInfo.size.height}px`;
+    minWidth && (elem.style.minWidth = `${minWidth}px`);
+
+    dragInfo.size.height &&
+      (elem.style.minHeight = `${dragInfo.size.height}px`);
+
+    dragInfo.size.width && (elem.style.width = `${dragInfo.size.width}px`);
   }
 
-  if (dragInfo.size.width) {
-    // elementSize.width = `${dragInfo.size.width}px`;
-    elementSize.minWidth = `${dragInfo.size.width}px`;
-  }
-
-  return [elementSize, handleMouseDown, handleMouseMove, handleMouseUp];
+  return [elemRef, handleMouseDown, handleMouseMove, handleMouseUp];
 }
 
 export default useResize;

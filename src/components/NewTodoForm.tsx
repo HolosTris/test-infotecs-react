@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, FormEvent, MouseEvent, useState } from "react";
-import { ITodo, Todo } from "../types/types";
+import { IServerTodo, Todo } from "../types/types";
 import cl from "./NewTodoForm.module.css";
 
 interface NewTodoFormProps {

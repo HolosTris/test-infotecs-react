@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from "react";
-import { ITodo, Todo } from "../types/types";
+import { IServerTodo, Todo } from "../types/types";
 import { cutContent } from "../utils/utils";
 import cl from "./TodoItem.module.css";
 

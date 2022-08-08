@@ -8,53 +8,34 @@ import React, {
   useRef,
   useState,
 } from "react";
-import PostService from "../api/PostService";
-import useDrag from "../hooks/useDrag";
-import useResize from "../hooks/useResize";
-import { ICoords, ITodo, Todo } from "../types/types";
-import { isOverflown } from "../utils/utils";
+import { Todo } from "../types/types";
 import NewTodoForm from "./NewTodoForm";
 import SearchForm from "./SearchForm";
 import TodoItem from "./TodoItem";
 import cl from "./TodoList.module.css";
-import WidthChanger from "./WidthChanger";
 
 interface TodoListProps {
   todos: Todo[];
   setTodos: (todos: Todo[]) => void;
   selectedTodoId: number | null;
   setSelectedTodoId: (todos: number) => void;
-  size: CSSProperties;
 }
 
-// const { innerHeight, innerWidth } = window;
-// const startingPosition = { x: 100, y: 0 };
+const TodoList = forwardRef<HTMLElement, TodoListProps>(
+  ({ todos, setTodos, selectedTodoId, setSelectedTodoId }, sectionRef) => {
+    const [searchQuery, setSearchQuery] = useState("");
 
-const TodoList: FC<TodoListProps> = ({
-  todos,
-  setTodos,
-  selectedTodoId,
-  setSelectedTodoId,
-  size,
-}) => {
-  const [query, setQuery] = useState("");
+    // Фильтруем все todo согласно поисковому запросу и кешируем получившийся список
+    const foundTodos = useMemo(() => {
+      return filterTodo(searchQuery, todos);
+    }, [searchQuery, todos]);
 
-  const foundTodos = useMemo(() => {
-    return filterTodo(query, todos);
-  }, [query, todos]);
-
-  return (
-    <>
-      <section
-        className={cl.todoList}
-        style={{
-          ...size,
-        }}
-      >
+    return (
+      <section ref={sectionRef} className={cl.todoList}>
         <div className={cl.todoCon}>
-          <SearchForm query={query} setQuery={setQuery} />
+          <SearchForm query={searchQuery} setQuery={setSearchQuery} />
           <div>
-            {query && <div className={cl.searchTip}>Search result:</div>}
+            {searchQuery && <div className={cl.searchTip}>Search result:</div>}
             {foundTodos.map((todo) => {
               return (
                 <TodoItem
@@ -62,7 +43,7 @@ const TodoList: FC<TodoListProps> = ({
                   todo={todo}
                   selectedTodoId={selectedTodoId}
                   setSelectedTodoId={setSelectedTodoId}
-                  searchQuery={query}
+                  searchQuery={searchQuery}
                 />
               );
             })}
@@ -70,18 +51,18 @@ const TodoList: FC<TodoListProps> = ({
         </div>
         <NewTodoForm addNewTodo={addNewTodo} />
       </section>
-    </>
-  );
+    );
 
-  function addNewTodo(newTodo: Todo) {
-    setTodos([...todos, newTodo]);
+    function addNewTodo(newTodo: Todo) {
+      setTodos([...todos, newTodo]);
+    }
+
+    function filterTodo(query: string, todos: Todo[]) {
+      if (!query) return todos;
+
+      return todos.filter((todo) => todo.title.includes(query));
+    }
   }
-
-  function filterTodo(query: string, todos: Todo[]) {
-    if (!query) return todos;
-
-    return todos.filter((todo) => todo.title.includes(query));
-  }
-};
+);
 
 export default TodoList;

@@ -42,18 +42,17 @@ const TodoItem: FC<TodoItemProps> = ({
   }
 
   function highlightFounded(text: string) {
-    if (!text.includes(searchQuery)) return text;
+    const iFound = text.toLowerCase().indexOf(searchQuery.toLowerCase());
 
-    const iFounded = text.indexOf(searchQuery);
+    if (!~iFound) return text;
 
-    const textBeforeElem = highlightFounded(text.slice(0, iFounded));
+    const textBeforeElem = highlightFounded(text.slice(0, iFound));
+    const foundText = text.slice(iFound, iFound + searchQuery.length);
     const textAfterElem = highlightFounded(
-      text.slice(iFounded + searchQuery.length, text.length)
+      text.slice(iFound + searchQuery.length)
     );
 
-    const highlightTextElem = (
-      <span className={cl.highlight}>{searchQuery}</span>
-    );
+    const highlightTextElem = <span className={cl.highlight}>{foundText}</span>;
 
     return (
       <React.Fragment>

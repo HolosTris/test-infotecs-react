@@ -60,7 +60,9 @@ const TodoList = forwardRef<HTMLElement, TodoListProps>(
     function filterTodo(query: string, todos: Todo[]) {
       if (!query) return todos;
 
-      return todos.filter((todo) => todo.title.includes(query));
+      return todos.filter((todo) =>
+        todo.title.toLowerCase().includes(query.toLowerCase())
+      );
     }
   }
 );
